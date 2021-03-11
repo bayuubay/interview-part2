@@ -20,6 +20,9 @@ mongoose.connect(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/',(req,res)=>{
+  res.send("<h1>WELCOME TO BAYU SURYO AJI'S PERSONAL WEBSITE</h1>")
+})
 app.use("/users/sql", userSql);
 app.use("/users/mongo", userMongo);
 app.use("/profile/sql", profileSql);
