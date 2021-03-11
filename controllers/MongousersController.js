@@ -1,6 +1,7 @@
 const router = require("express").Router();
-const User = require("./mongoose");
-const middleware = require("./middleware");
+const User = require("../models/usersModel");
+
+const middleware = require("../middleware");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 module.exports = function mainApp() {
@@ -48,11 +49,7 @@ module.exports = function mainApp() {
         statusCode = 400;
         throw new Error("Password is Invalid");
       }
-      /**
-       * generate token JWT,
-       * yang dimasukan data yang tidak sensitif,
-       * i.e username (password jangan dimasukan)
-       */
+
       const token = jwt.sign(
         {
           id: users._id,
@@ -75,38 +72,38 @@ module.exports = function mainApp() {
     }
   });
 
-  router.get("/",middleware, async (req, res) => {
+  router.get("/", middleware, async (req, res) => {
     try {
       const userId = res.locals.user.id;
-      const dataUser = await User.findOne({ _id: userId });
+      const dataUser = await User.findOne({ _id: userId }, [
+        "-password",
+      ]).populate({ path: "profileId" });
 
       res.json({
         message: "congratulation, you manage to access me!!",
-        result: dataUser.username,
+        result: dataUser,
       });
     } catch (error) {
       console.log(error);
     }
   });
 
-  router.put("/update",middleware,async(req,res)=>{
-      const payload=req.body
-      const id=res.locals.user.id
-      await User.updateOne({_id:id},payload)
-      res.json({
-        message: "success update data user",
+  router.put("/", middleware, async (req, res) => {
+    const payload = req.body;
+    const id = res.locals.user.id;
+    await User.updateOne({ _id: id }, payload);
+    res.json({
+      message: "success update data user",
+    });
+  });
 
-      });
-  })
-
-  router.delete('/delete',async(req,res)=>{
-    const id=req.query.id
-      await User.updateOne({_id:id})
-      res.json({
-        message: "success delete data user",
-
-      });
-  })
+  router.delete("/", async (req, res) => {
+    const id = req.query.id;
+    await User.deleteOne({ _id: id });
+    res.json({
+      message: "success delete data user",
+    });
+  });
 
   return router;
 };

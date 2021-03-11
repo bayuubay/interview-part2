@@ -12,23 +12,23 @@ module.exports = {
      * }], {});
      */
     await queryInterface.bulkInsert(
-      "users",
+      "profiles",
       [
         {
-          fullName: "Bayu Suryo Aji",
-          profileId: 1,
+          gender: "male",
+          age: 20,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          fullName: "Michael Jackson",
-          profileId: 2,
+          gender: "male",
+          age: 36,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          fullName: "Eka Dyah",
-          profileId: 3,
+          gender: "female",
+          age: 20,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
