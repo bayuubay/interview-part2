@@ -71,6 +71,20 @@ module.exports = function mainApp() {
       });
     }
   });
+  router.get("/all", async (req, res) => {
+    try {
+      const dataUser = await User.find({}, ["-password"]).populate({
+        path: "profileId",
+      });
+
+      res.json({
+        message: "success read all data user",
+        result: dataUser,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
   router.get("/", middleware, async (req, res) => {
     try {
